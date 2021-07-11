@@ -88,7 +88,7 @@ class CashCalculator(Calculator):
                       'rub': ('руб', CashCalculator.RUB_RATE)}
         return currencies
 
-    def get_today_cash_remained(self, currency: str):
+    def get_today_cash_remained(self, currency: str) -> str:
         """Сколько ещё могу потратить в разной валюте."""
         cash_remained = self.get_remains()
         dict_currency = self.settings()
@@ -103,5 +103,5 @@ class CashCalculator(Calculator):
         else:
             cash_remained = abs(cash_remained)
             message = (f'Денег нет, держись: твой долг - {cash_remained}'
-                       f'{name}')
+                       f' {name}')
         return message
