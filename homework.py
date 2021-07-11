@@ -101,7 +101,7 @@ class CashCalculator(Calculator):
         if cash_remained > 0:
             message = f'На сегодня осталось {cash_remained} {name}'
         else:
-            cash_remained = abs(cash_remained) 
+            cash_remained = abs(cash_remained)
             message = (f'Денег нет, держись: твой долг - {cash_remained}'
                        f'{name}')
         return message
