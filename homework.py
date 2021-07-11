@@ -1,20 +1,24 @@
 import datetime as dt
 from typing import Optional
+FORMAT_DATE = "%d.%m.%Y"
 
 
-def set_date(date):
+def set_date(date: dt.date):
     """
     Функция для преобразования
-    даты в констукте.
+    даты в конструкте.
     """
     if not date:
         return dt.date.today()
-    return dt.datetime.strptime(date, "%d.%m.%Y").date()
+    return dt.datetime.strptime(date, FORMAT_DATE).date()
 
 
 class Record():
-    """Записи для калькулятора"""
+    """Записи для калькулятора."""
 
+    amount: float
+    comment: str
+    date: Optional[str]
     def __init__(self, amount: float, comment: str,
                  date: Optional[str] = None) -> None:
         self.amount = amount
@@ -24,39 +28,34 @@ class Record():
 
 class Calculator():
     """Калькулятор с общими методами."""
+    limit = float
+    record: Record
 
-    def __init__(self, limit):
+    def __init__(self, limit: float) -> None:
         self.limit = limit
         self.records = []
 
     def add_record(self, record: Record) -> None:
-        """Добавляем запись в калькулятор."""
+        """Добавление записи в калькулятор."""
         self.records.append(record)
 
     def get_today_stats(self) -> float:
-        """Считаем сколько потратили
-        ккал/ денег за сегодня."""
-        today_stats = []
+        """Сколько потрачено
+        сегодня."""
         today = dt.date.today()
-        for record in self.records:
-            if record.date == today:
-                today_stats.append(record.amount)
-        return sum(today_stats)
+        return sum([x.amount for x in self.records
+                   if x.date == today])
 
     def get_week_stats(self) -> float:
-        """Считаем сколько потратили
-        денег/ккал
-        за последнюю неделю."""
-        week_stats = []
+        """Сколько потрачено
+        в течение недели."""
         today = dt.date.today()
         week_start = today - dt.timedelta(days=7)
-        for record in self.records:
-            if week_start < record.date <= today:
-                week_stats.append(record.amount)
-        return sum(week_stats)
+        return sum([x.amount for x in self.records
+                   if week_start < x.date <= today])
 
     def get_remains(self) -> float:
-        """Сколько можно еще потратить."""
+        """Сколько можно еще потратить сегодня."""
         remains = self.limit - self.get_today_stats()
         return remains
 
@@ -65,16 +64,15 @@ class CaloriesCalculator(Calculator):
     """Калькулятор калорий."""
 
     def get_calories_remained(self) -> str:
-        """Считаю могу ли еще что-нибудь съесть."""
+        """Могу ли поесть еще и сколько."""
         ccal_remained = self.get_remains()
         today_stats = self.get_today_stats()
         if today_stats < self.limit:
-            message = (f'Сегодня можно съесть что-нибудь ещё, '
-                       f'но с общей калорийностью не более '
-                       f'{ccal_remained} кКал')
+            return ('Сегодня можно съесть что-нибудь ещё, '
+                    'но с общей калорийностью не более '
+                    f'{ccal_remained} кКал')
         else:
-            message = 'Хватит есть!'
-        return message
+            return 'Хватит есть!'
 
 
 class CashCalculator(Calculator):
@@ -82,23 +80,28 @@ class CashCalculator(Calculator):
     EURO_RATE: float = 88.22
     USD_RATE: float = 74.3
     RUB_RATE: float = 1.0
+    currency: str
 
-    def get_today_cash_remained(self, currency: str):
-        """Сколько ещё могу потратить в разной валюте."""
+    def settings(self):
         currencies = {'usd': ('USD', CashCalculator.USD_RATE),
                       'eur': ('Euro', CashCalculator.EURO_RATE),
                       'rub': ('руб', CashCalculator.RUB_RATE)}
+        return currencies
+
+    def get_today_cash_remained(self, currency: str):
+        """Сколько ещё могу потратить в разной валюте."""
         cash_remained = self.get_remains()
+        dict_currency = self.settings()
         if cash_remained == 0:
             return 'Денег нет, держись'
-        if currency not in currencies:
+        if currency not in dict_currency:
             return f'Валюта {currency} не поддерживается'
-        name, rate = currencies[currency]
+        name, rate = dict_currency[currency]
         cash_remained = round(cash_remained / rate, 2)
         if cash_remained > 0:
             message = f'На сегодня осталось {cash_remained} {name}'
         else:
-            cash_remained = abs(cash_remained)
-            message = (f'Денег нет, держись: твой долг - {cash_remained} '
+            cash_remained = abs(cash_remained) 
+            message = (f'Денег нет, держись: твой долг - {cash_remained}'
                        f'{name}')
         return message
