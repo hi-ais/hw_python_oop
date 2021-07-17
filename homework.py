@@ -15,7 +15,7 @@ def set_date(date: Optional[dt.date]) -> None:
     return dt.datetime.strptime(date, FORMAT_DATE).date()
 
 
-class Record():
+class Record:
     """Записи для калькулятора."""
 
     def __init__(self, amount: int, comment: str,
@@ -25,7 +25,7 @@ class Record():
         self.date = set_date(date)
 
 
-class Calculator():
+class Calculator:
     """Калькулятор с общими методами."""
 
     def __init__(self, limit: float) -> None:
