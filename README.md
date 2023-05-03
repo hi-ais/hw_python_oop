@@ -1,26 +1,26 @@
-# Калькулятор денег и калорий
-Калькулятор денег и калорий - инструменты для контроля расходов и доходов
+# Calculator for money and calories
+Money and calories calculator - tools to control expenses and income
 
-## Условия задачи
+## Conditions of the problem
 
-Создайте два калькулятора: для подсчёта денег и калорий. Нужна только логика — отдельный класс для каждого из калькуляторов.
+Create two calculators: for counting money and calories. All you need is logic - a separate class for each of the calculators.
 
-__Калькулятор денег умеет:__
+__Money calculator can:__
 
-* Сохранять новую запись о расходах методом add_record()
-* Считать, сколько денег потрачено сегодня методом get_today_stats()
-* Определять, сколько ещё денег можно потратить сегодня в рублях, долларах или евро — метод get_today_cash_remained(currency)
-* Считать, сколько денег потрачено за последние 7 дней — метод get_week_stats()
+* Save new expense record with add_record() method
+* Calculate how much money was spent today using the get_today_stats() method
+* Determine how much more money you can spend today in rubles, dollars or euros - get_today_cash_remained(currency) method
+* Calculate how much money was spent in the last 7 days - get_week_stats() method
 
-__Калькулятор калорий умеет:__
+__Calorie calculator can:__
 
-* Сохранять новую запись о приёме пищи— метод add_record()
-* Считать, сколько калорий уже съедено сегодня — метод get_today_stats()
-* Определять, сколько ещё калорий можно/нужно получить сегодня — метод get_calories_remained()
-* Считать, сколько калорий получено за последние 7 дней — метод get_week_stats()
+* Save a new meal record - add_record() method
+* Calculate how many calories have already been eaten today - get_today_stats() method
+* Determine how many more calories you can / need to get today - get_calories_remained() method
+* Calculate how many calories you got in the last 7 days - get_week_stats() method
 
-__Общая функциональность калькуляторов ***(класс Calculator)***:__
+__General functionality of calculators ***(Calculator class)***:__
 
-* хранение записей
-* знание дневного лимита
-* суммирование записей за конкретные даты
+* storage of records
+* knowledge of the daily limit
+* summation of records for specific dates
